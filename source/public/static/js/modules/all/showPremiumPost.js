@@ -1,0 +1,1 @@
+(function(){define(["libUnderscore"],function(){var t,o,m,s;console.log("showPremiumPost1..."),s={body:"body, html",tpl:"#tplPremiumPost",premiumPost:".ctn-premium-post"},o={},t=function(){o.body=$(s.body),o.tpl=_.template($(s.tpl).html()),o.premiumPost=$(s.premiumPost)},t(),m={showPost:function(){var t;t=o.tpl(premiumAds[0]),o.premiumPost.html(t)}},m.showPost()})}).call(this);

@@ -1,0 +1,1 @@
+(function(){require(["libFancybox"],function(){var o,n,i,p;p={popup:".popup",login:".login_popup"},n={},o=function(){n.popup=$(p.popup),n.login=$(p.login)},o(),i={initFancybox:function(){n.popup.fancybox({width:468}),n.login.fancybox({width:468,beforeShow:function(){return $(".fancybox-overlay").css("background","rgba(0, 0, 0, 0.68)")}})}},i.initFancybox()})}).call(this);

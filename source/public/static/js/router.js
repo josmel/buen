@@ -1,0 +1,1 @@
+(function(){define(["vendor/domReady/domReady"],function(o){var n;n=function(o){var n,l,i,r;for(r in o)if(r=r,"allControllers"===r&&o[r](),"controllers"===r)for(i in o[r])if(i===alpha.controller)for(l in o[r][i])for(n in o[r][i][l])n===alpha.action&&o[r][i][l][n]()},o(function(){return console.log("El dom esta listo"),n(window.schema)})})}).call(this);

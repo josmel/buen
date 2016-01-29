@@ -1,0 +1,1 @@
+(function(){require([],function(){var o,l,n,c,i;console.log("vendeindeopd vneidnienveo"),c={body:"body, html",scroll:".scroll"},l={},o=function(){l.body=$(c.body),l.scroll=$(c.scroll)},i=function(){l.scroll.on("click",n.scrollTop)},n={scrollTop:function(){var o,n;o=$(this),n=o.data("top"),l.body.animate({scrollTop:n+50},1e3)}},o(),i()})}).call(this);

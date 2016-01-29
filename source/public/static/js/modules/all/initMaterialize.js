@@ -1,0 +1,1 @@
+(function(){define(["libMaterialize","hammerjs"],function(){console.log("initMaterialize..."),Waves.displayEffect()})}).call(this);

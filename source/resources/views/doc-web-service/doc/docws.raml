@@ -1,0 +1,1301 @@
+#%RAML 0.8
+title: Doc Ws Buendato
+version: v1
+mediaType: application/json
+baseUri: http://dev-buendato.osp.pe/wservice
+protocols: [HTTP]
+documentation:
+  - title: Sobre los servicios
+    content: En este documento se encuentra todo los servicios web relacionados al proyecto "Buendato" en el dominio  http://dev-buendato.osp.pe/wservice seguido de la url del servicio
+securitySchemes:
+  - jwt:
+      describedBy:
+        queryParameters:
+           token:
+             description: provide token
+             type: string
+             example: ABS-SDF
+      type: x-jwt
+/register:
+  description: Registrar Usuario
+  displayName: Registrar Usuario
+  post:
+    description: |
+        Registrar Usuario
+    body:
+        application/json:
+          schema: |
+            { 
+              "type": "object",
+              "description": "register user",
+              "properties": 
+                {                    
+                    "email": { "type": "string" },
+                    "idfacebook": { "type": "string" },
+                    "picture": { "type": "string" },
+                    "name": { "type": "string"},
+                    "lastname": { "type": "string"}
+                },
+              "required": [ "email", "idfacebook","name","lastname"]
+            }
+          example: |
+            {
+              "email":"user@osp.pe",
+              "idfacebook":"1234567894551122"
+              "picture":"https://facebook.com/15456456454?size=small",
+              "name":"josmel",
+              "lastname":"yupanqui",
+              }
+    responses:
+      200:
+        description: Lista en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                "status": 1,
+                "msg": "OK",
+                "data": [ 
+                           {
+                             "id":"1"
+                           } 
+                        ],
+                "data_error": []
+              }
+/login:
+  description: Login del usuario
+  displayName: Login del usuario
+  post:
+    description: |
+        Login del usuario
+    body:
+        application/json:
+          schema: |
+            { 
+              "type": "object",
+              "description": "Login",
+              "properties": 
+                {                    
+                    "email": { "type": "string" },
+                    "idfacebook": { "type": "string" },
+                    "tokendevice": { "type": "string" },
+                    "typedevice": { "type": "integer", "value": "1=Ios or 2=Android"}
+                },
+              "required": [ "email", "idfacebook","tokendevice","typedevice" ]
+            }
+          example: |
+            {
+                "email":"jy@osp.pe",
+                "idfacebook":123456789123,
+                "tokendevice":"458478748748545489748749874874897487498484984",
+                "typedevice":2
+            }
+    responses:
+      200: 
+          headers:
+            _token: 
+              description: token para los posteriores request
+              example : 45847874874ewfewfewf854548974nyntyntyn8749874874897487498484984
+          body:
+            application/json:
+              example: |
+                {
+                    "status": 1,
+                    "msg": "ok",
+                    "data": [
+                        {
+                            "id": "12",
+                            "name": "jos",
+                            "lastname": "yupanqui",
+                            "email": "jy@osp.pe",
+                            "tokendevice": "31234243145253",
+                            "picture": "http://10.10.0.67/dinamic/user/20151214194024245.jpg",
+                            "flagactive": "1",
+                            "lastupdate": "2016-01-07 19:34:17",
+                            "datecreate": "2015-12-14 19:40:24",
+                            "datedelete": null,
+                            "typedevice": "1",
+                            "flagterms": "1",
+                            "categories": [
+                                {
+                                    "id": "1",
+                                    "picture": "http://10.10.0.67/ssss",
+                                    "name_category": "mantenimiento"
+                                },
+                                {
+                                    "id": "4",
+                                    "picture": null,
+                                    "name_category": "educación"
+                                },
+                                {
+                                    "id": "6",
+                                    "picture": null,
+                                    "name_category": "comida"
+                                }
+                            ]
+                        }
+                    ],
+                    "data_error": []
+                }
+/logout:
+  description: cancelar la sesión de usuario y borrar token de dispositivo
+  displayName: Logout del usuario
+  post:
+    securedBy: [jwt]
+    headers:
+      Authorization:
+        description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+        type: string
+    description: |
+        Logout del usuario
+    responses:
+      200:
+        description: resultado en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                "status": 1,
+                "msg": "OK",
+                "data": [  ],
+                "data_error": []
+              }
+/user:
+  description: Servicio de datos de Usuario
+  displayName: Usuario
+  get:
+    securedBy: [jwt]
+    headers:
+      Authorization:
+        description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+        type: string
+    description: Retorna datos del usuario
+    responses:
+      200:
+        description: Lista en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                "status": 1,
+                "msg": "ok",
+                "data": [
+                    {
+                        "id": "12",
+                        "name": "jos",
+                        "lastname": "yupanqui",
+                        "email": "jy@osp.pe",
+                        "tokendevice": "31234243145253",
+                        "picture": "http://10.10.0.67/dinamic/user/20151214194024245.jpg",
+                        "flagactive": "1",
+                        "lastupdate": "2016-01-07 19:34:17",
+                        "datecreate": "2015-12-14 19:40:24",
+                        "datedelete": null,
+                        "typedevice": "1",
+                        "flagterms": "1",
+                        "categories": [
+                            {
+                                "id": "1",
+                                "picture": "http://10.10.0.67/ssss",
+                                "name_category": "mantenimiento"
+                            },
+                            {
+                                "id": "4",
+                                "picture": null,
+                                "name_category": "educación"
+                            },
+                            {
+                                "id": "6",
+                                "picture": null,
+                                "name_category": "comida"
+                            }
+                        ]
+                    }
+                ],
+                "data_error": []
+              }
+  /{user_id}: 
+    description: Detalle de categoria
+    displayName: Detalle de categoria
+    uriParameters:
+      user_id:
+        description: id de usuario
+        type: integer
+        example: 1
+    put:
+      securedBy: [jwt]
+      headers:
+        Authorization:
+          description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+          type: string
+      description: actualizar datos de usuario ,asi como término(flagterms a 1)
+      body:
+        application/json:
+            schema: |
+                { 
+                    "type": "object",
+                    "description": "register user",
+                    "properties": 
+                      {                    
+                          "picture": { "type": "string" },
+                          "name": { "type": "string"},
+                          "lastname": { "type": "string"},
+                          "flagterms": { "type": "integer","value":"0:inactivo, 1=activo"}
+                      },
+                    "required": []
+                }
+            example: |
+                {
+                    "flagterms":1
+                    "picture":"https://facebook.com/15456456454?size=small",
+                    "name":"josmel",
+                    "lastname":"yupanqui",
+                }
+      responses:
+        200:
+          description: Lista en formato JSon
+          body:
+            application/json:
+              example: |
+                {
+                    "status": 1,
+                    "msg": "ok",
+                    "data": [
+                              {
+                                "id":1
+                              }
+                            ],
+                    "data_error": []
+                }
+/categories:
+  displayName: Categorias
+  post:
+    securedBy: [jwt]
+    headers:
+      Authorization:
+        description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+        type: string
+    description: |
+        Registrar categoria de Usuario
+    body:
+        application/json:
+            schema: |
+                { 
+                  "type": "object",
+                  "description": "register category for user",
+                  "properties": 
+                    {                    
+                        "categories_id": { "type": "string"}
+                    },
+                  "required": [ "categories_id" ]
+                }
+            example: |
+                {
+                    "categories_id":"1-2-3-4"
+                }
+    responses:
+      200:
+        description: Lista en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                "status": 1,
+                "msg": "ok",
+                "data": [],
+                "data_error": []
+              }
+  get:
+    securedBy: [jwt]
+    headers:
+      Authorization:
+        description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+        type: string
+    description: Lista de todas las categorias
+    responses:
+      200:
+        description: Lista en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                    "status": 1,
+                    "msg": "ok",
+                    "data": [
+                        {
+                            "id": "1",
+                            "name_category": "mantenimiento",
+                            "lastupdate": "2015-12-14 19:40:24",
+                            "datecreate": "2015-12-14 19:40:24",
+                            "flagactive": "1",
+                            "picture": "http://local.buendato//dinamic/user/20151218154743297.jpg"
+                        },
+                        {
+                            "id": "2",
+                            "name_category": "deporte",
+                            "lastupdate": "2015-12-14 19:40:24",
+                            "datecreate": "2015-12-14 19:40:24",
+                            "flagactive": "1",
+                            "picture": null
+                        },
+                        {
+                            "id": "3",
+                            "name_category": "salud",
+                            "lastupdate": "2015-12-14 19:40:24",
+                            "datecreate": "2015-12-14 19:40:24",
+                            "flagactive": "1",
+                            "picture": null
+                        },
+                        {
+                            "id": "4",
+                            "name_category": "educación",
+                            "lastupdate": "2015-12-14 19:40:24",
+                            "datecreate": "2015-12-14 19:40:24",
+                            "flagactive": "1",
+                            "picture": null
+                        },
+                        {
+                            "id": "5",
+                            "name_category": "vivienda",
+                            "lastupdate": "2015-12-14 19:40:24",
+                            "datecreate": "2015-12-14 19:40:24",
+                            "flagactive": "1",
+                            "picture": null
+                        },
+                        {
+                            "id": "6",
+                            "name_category": "comida",
+                            "lastupdate": "2015-12-14 19:40:24",
+                            "datecreate": "2015-12-14 19:40:24",
+                            "flagactive": "1",
+                            "picture": null
+                        }
+                    ],
+                    "data_error": []
+               }
+  /{user_id}: 
+    description: Detalle de categoria
+    displayName: Detalle de categoria
+    uriParameters:
+      user_id:
+        description: id de usuario
+        type: integer
+        example: 2
+    put:
+      securedBy: [jwt]
+      headers:
+        Authorization:
+          description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+          type: string
+      description: actualizar categorias de usuario
+      body:
+        application/json:
+            schema: |
+                { 
+                  "type": "object",
+                  "description": "update category for user",
+                  "properties": 
+                    {                    
+                        "categories_id": { "type": "string"}
+                    },
+                  "required": [ "categories_id" ]
+                }
+            example: |
+                {
+                    "categories_id":"1-2-3-4"
+                }
+      responses:
+        200:
+          description: Lista en formato JSon
+          body:
+            application/json:
+              example: |
+                {
+                    "status": 1,
+                    "msg": "ok",
+                    "data": [],
+                    "data_error": []
+                }
+  /{category_id}: 
+    description: Detalle de categoria
+    displayName: Detalle de categoria
+    uriParameters:
+      category_id:
+        description: id de categoria
+        type: integer
+        example: 2
+    get:
+      securedBy: [jwt]
+      headers:
+        Authorization:
+          description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+          type: string
+      description: Detalle de categoria
+      responses:
+        200:
+          description: Lista en formato JSon
+          body:
+            application/json:
+              example: |
+                {
+                    "status": 1,
+                    "msg": "ok",
+                    "data": {
+                        "id": "1",
+                        "name_category": "mantenimiento",
+                        "lastupdate": "2015-12-14 19:40:24",
+                        "datecreate": "2015-12-14 19:40:24",
+                        "flagactive": "1",
+                        "picture": "http://local.buendato/dinamic/user/20151218154743297.jpg"
+                    },
+                    "data_error": []
+                }
+/providers:
+  displayName: Proveedores
+  post:
+    securedBy: [jwt]
+    headers:
+      Authorization:
+        description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+        type: string
+    description: |
+        Registrar Proveedor
+    body:
+        application/json:
+            schema: |
+                { 
+                  "type": "object",
+                  "description": "register proveedor",
+                  "properties": 
+                    {                    
+                        "description": { "type": "string"},
+                        "pu_category_id": { "type": "integer"},
+                        "name_provider": { "type": "string"},
+                        "email": { "type": "string"},
+                        "phone": { "type": "string"},
+                        "website": { "type": "string"}
+                    },
+                  "required": [ "description" ,"pu_category_id","name_provider","email","phone"]
+                }
+            example: |
+                {                    
+                    "description": "new providers",
+                    "pu_category_id":1,
+                    "name_provider": "josmel",
+                    "email":"provider@osp.pe",
+                    "phone": "78787878",
+                    "website":"http://osp.pe",
+                 }
+    responses:
+      200:
+        description: Lista en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                "status": 1,
+                "msg": "ok",
+                "data": {
+                    "id": 6
+                },
+                "data_error": []
+              }
+  get:
+    securedBy: [jwt]
+    headers:
+      Authorization:
+        description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+        type: string
+    queryParameters:
+        page:
+            type: number
+            description: El numero de pagina para el paginado
+            required: false
+        pu_category_id:
+            type: number
+            description: id de categoria si se desea filtrar por categoria
+            required: false
+        name_provider:
+            type: string
+            description: nombre de proveedor si se desea filtrar por nombre de proveedor con minimo 3 caracteres
+            required: false
+    description: Lista de todos los proveedores paginados o filtrados por categoria
+    responses:
+      200:
+        description: Lista en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                  "status": 1,
+                  "msg": "ok",
+                  "data": [
+                      {
+                          "id": "1",
+                          "pu_category_id": "4",
+                          "user_id": null,
+                          "pr_type_id": "3",
+                          "name_provider": "peres",
+                          "reason_social": "S.A.C",
+                          "type_document": "1",
+                          "number_document": "54545454",
+                          "phone": "986547890",
+                          "website": "http://myface.com",
+                          "email": "abc@osp.pe",
+                          "address": null,
+                          "coordenate": null,
+                          "ranking": "1.50",
+                          "picture_face": "http://local.buendato//dinamic/category/20160120073123736.png",
+                          "lastupdate": "2016-01-26 23:55:19",
+                          "datecreate": null,
+                          "flagactive": "1",
+                          "picture_category": "http://local.buendato//dinamic/category/20160120073123736.png",
+                          "name_type": "premium",
+                          "name_category": "salud",
+                          "total_users": "5",
+                          "friends": [
+                              {
+                                  "idfacebook": "10156644988105647"
+                              },
+                              {
+                                  "idfacebook": "620320758106445"
+                              },
+                              {
+                                  "idfacebook": "10153512513095805"
+                              },
+                              {
+                                  "idfacebook": "10156576400725089"
+                              }
+                          ],
+                          "picture_provider": [
+                              {
+                                  "flagactive": "1",
+                                  "datecreate": null,
+                                  "picture": "http://local.buendato//dinamic/category/20160120073123736.png"
+                              },
+                              {
+                                  "flagactive": "1",
+                                  "datecreate": null,
+                                  "picture": "http://local.buendato//dinamic/category/20160120073123736.png"
+                              },
+                              {
+                                  "flagactive": "1",
+                                  "datecreate": null,
+                                  "picture": "http://local.buendato//dinamic/category/20160120073123736.png"
+                              }
+                          ]
+                      },
+                      {
+                          "id": "5",
+                          "pu_category_id": "2",
+                          "user_id": null,
+                          "pr_type_id": "2",
+                          "name_provider": "pedro picapiedra",
+                          "reason_social": null,
+                          "type_document": null,
+                          "number_document": null,
+                          "phone": "eeee",
+                          "website": null,
+                          "email": "email@osp.pe",
+                          "address": null,
+                          "coordenate": null,
+                          "ranking": "5.00",
+                          "picture_face": null,
+                          "lastupdate": "2016-01-22 22:49:12",
+                          "datecreate": "2015-12-28 20:16:25",
+                          "flagactive": "1",
+                          "picture_category": "http://local.buendato//dinamic/category/20160120073113822.png",
+                          "name_type": "comun",
+                          "name_category": "deporte",
+                          "total_users": "5",
+                          "friends": [
+                              {
+                                  "idfacebook": "10156644988105647"
+                              },
+                              {
+                                  "idfacebook": "620320758106445"
+                              },
+                              {
+                                  "idfacebook": "10153512513095805"
+                              },
+                              {
+                                  "idfacebook": "10156576400725089"
+                              }
+                          ],
+                          "picture_provider": []
+                      },
+                      {
+                          "id": "2",
+                          "pu_category_id": "1",
+                          "user_id": null,
+                          "pr_type_id": "2",
+                          "name_provider": "zidane",
+                          "reason_social": "zisu",
+                          "type_document": "3",
+                          "number_document": null,
+                          "phone": "112345567",
+                          "website": "www.zzz.com",
+                          "email": "zisu@gmail.com",
+                          "address": null,
+                          "coordenate": null,
+                          "ranking": "3.00",
+                          "picture_face": "http://local.buendato//dinamic/provider/20160121033023475.jpg",
+                          "lastupdate": "2016-01-21 15:30:23",
+                          "datecreate": null,
+                          "flagactive": "1",
+                          "picture_category": "http://local.buendato//dinamic/category/20160120073113822.png",
+                          "name_type": "comun",
+                          "name_category": "deporte",
+                          "total_users": "5",
+                          "friends": [
+                              {
+                                  "idfacebook": "10156644988105647"
+                              },
+                              {
+                                  "idfacebook": "620320758106445"
+                              },
+                              {
+                                  "idfacebook": "10153512513095805"
+                              },
+                              {
+                                  "idfacebook": "10156576400725089"
+                              }
+                          ],
+                          "picture_provider": []
+                      }
+                  ],
+                  "data_error": []
+              }
+  /{provider_id}: 
+    description: Detalle de proveedor
+    displayName: Detalle de proveedor
+    uriParameters:
+      provider_id:
+        description: id de proveedor
+        type: integer
+        example: 1
+    get:
+      securedBy: [jwt]
+      headers:
+        Authorization:
+          description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+          type: string
+      queryParameters:
+        page:
+            type: number
+            description: El numero de pagina
+            required: true
+      description: Detalle de valoraciones de proveedor
+      responses:
+        200:
+          description: Lista en formato JSon
+          body:
+            application/json:
+              example: |
+                {
+                    "status": 1,
+                    "msg": "ok",
+                    "data": [
+                        {
+                            "id": "7",
+                            "user_id": "14",
+                            "pr_provider_id": "1",
+                            "description": "perefectao servicio",
+                            "punctuation": "5",
+                            "flagactive": "1",
+                            "picture": "dede/ddd.jpg",
+                            "datecreate": null,
+                            "lastupdate": null,
+                            "picture_user": "http://10.10.0.67//dinamic/user/20151218154743297.jpg",
+                            "picture_comment": "http://10.10.0.67/dede/ddd.jpg",
+                            "name_user": "noel yupanqui"
+                        },
+                        {
+                            "id": "8",
+                            "user_id": "12",
+                            "pr_provider_id": "1",
+                            "description": "hola que tal",
+                            "punctuation": "4",
+                            "flagactive": "1",
+                            "picture": "dede/ddd.jpg",
+                            "datecreate": null,
+                            "lastupdate": null,
+                            "picture_user": "http://10.10.0.67//dinamic/user/20151214194024245.jpg",
+                            "picture_comment": "http://10.10.0.67/dede/ddd.jpg",
+                            "name_user": "jos yupanqui"
+                        }
+                    ],
+                    "data_error": []
+                }
+/publication:
+  displayName: Publicaciones
+  post:
+    securedBy: [jwt]
+    headers:
+      Authorization:
+        description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+        type: string
+    description: |
+        Registrar Publicacion
+    body:
+        application/json:
+            schema: |
+                { 
+                  "type": "object",
+                  "description": "register publication",
+                  "properties": 
+                    {                    
+                        "description": { "type": "string"},
+                        "pu_category_id": { "type": "integer"},
+                        "pr_provider_id": { "type": "integer"},
+                        "picture": { "type": "string"}
+                    },
+                  "required": [ "description" ,"pu_category_id"]
+                }
+            example: |
+                {                    
+                    "description": "Alguien me puede recomendar una masajista?",
+                    "pu_category_id":1,
+                    "picture":"iVBORw0KGgoAAAANSUhEUgAAADsAAAApCAYAAACLO1EjAAAAAXNSR0IArs4c6QAA
+                                AAlwSFlzAAAWJQAAFiUBSVIk8AAAABxpRE9UAAAAAgAAAAAAAAAVAAAAKAAAABUA
+                                AAAUAAAHlWThBZQAAAdhSURBVGgFjFjLruJGEOXnsshmpEiRssln8DnZzSqJFI2U"
+                 }
+    responses:
+      200:
+        description: Lista en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                "status": 1,
+                "msg": "ok",
+                "data": {
+                    "id": 6
+                },
+                "data_error": []
+              }
+  get:
+    securedBy: [jwt]
+    headers:
+      Authorization:
+        description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+        type: string
+    queryParameters:
+        page:
+            type: number
+            description: El numero de pagina para el paginado
+            required: false
+        categories_id:
+            type: string
+            description: lista de categoria separado por "-" si se desea filtrar por categoria . Ejem"[1-2-3]
+            required: false
+        user_id:
+            type: number
+            description: id de usuario si se desea filtrar por usuario
+            required: false
+        description:
+            type: string
+            description: busqueda por descripcion de publicacion con un minimo de 3 caracteres
+            required: false
+    description: Lista de todas las publicaciones  paginadas las cuales se pueden  filtradas por categoria o usuario
+    responses:
+      200:
+        description: Lista en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                  "status": 1,
+                  "msg": "ok",
+                  "data": [
+                      {
+                          "id": "3",
+                          "idfacebook": 12421413434134,
+                          "pu_type_id": "3",
+                          "pu_category_id": "4",
+                          "pu_state_id": "1",
+                          "user_id": "14",
+                          "description": "Tras ello, la mujer fue detenida y pasó la noche en la comisaría de Chorrillos. Dadas las evidencias, la mujer le puede seguir los pasos ",
+                          "date_publish": "2015-12-21 20:09:52",
+                          "date_expired": "2015-12-21 20:09:52",
+                          "flagactive": "1",
+                          "datecreate": "2015-12-21 20:09:52",
+                          "lastupdate": "2016-01-26 17:22:18",
+                          "picture_publication": "http://local.buendato//dinamic/publication/20160121082308319.jpg",
+                          "picture_user": "http://local.buendato//dinamic/user/20151218154743297.jpg",
+                          "picture_category": "http://local.buendato//dinamic/category/20160120073113822.png",
+                          "name_user": "noel yupanqui",
+                          "name_category": "deporte",
+                          "name_type": "premium",
+                          "likes": "0",
+                          "comments": "2",
+                          "provider": [
+                              {
+                                  "pr_provider_id": "1",
+                                  "id_type_provider": "3",
+                                  "name_provider": "peres",
+                                  "name_type_provider": "premium",
+                                  "approved": "1",
+                                  "total_users": "0",
+                                  "score": "1.50",
+                                  "picture_provider": "http://local.buendato/Array",
+                                  "name_category": "educación",
+                                  "picture_category": "http://local.buendato//dinamic/category/20160120073133296.png"
+                              }
+                          ]
+                      },
+                      {
+                          "id": "2",
+                          "idfacebook": 12321421421421,
+                          "pu_type_id": "2",
+                          "pu_category_id": null,
+                          "pu_state_id": "1",
+                          "user_id": "14",
+                          "description": "Alguien me puede recomendar una masajista?",
+                          "date_publish": "0000-00-00 00:00:00",
+                          "date_expired": "0000-00-00 00:00:00",
+                          "flagactive": "1",
+                          "datecreate": "2015-12-21 20:07:24",
+                          "lastupdate": "2016-01-22 20:17:28",
+                          "picture_publication": "http://local.buendato//dinamic/publication/20160122031949781.png",
+                          "picture_user": "http://local.buendato//dinamic/user/20151218154743297.jpg",
+                          "picture_category": "http://local.buendato//dinamic/category/20160120073123736.png",
+                          "name_user": "noel yupanqui",
+                          "name_category": "salud",
+                          "name_type": "popular",
+                          "likes": "1",
+                          "comments": "1",
+                          "provider": []
+                      },
+                      {
+                          "id": "7",
+                          "idfacebook": 123213213421321,
+                          "pu_type_id": "2",
+                          "pu_category_id": null,
+                          "pu_state_id": "1",
+                          "user_id": "14",
+                          "description": "Alguien me puede recomendar una masajista?",
+                          "date_publish": "2015-12-21 20:22:34",
+                          "date_expired": "2015-12-21 20:22:34",
+                          "flagactive": "1",
+                          "datecreate": "2015-12-21 20:22:34",
+                          "lastupdate": "2016-01-21 16:53:06",
+                          "picture_publication": "http://local.buendato//dinamic/publication/20160121081026801.png",
+                          "picture_user": "http://local.buendato//dinamic/user/20151218154743297.jpg",
+                          "picture_category": "http://local.buendato//dinamic/category/2016012007310311.png",
+                          "name_user": "noel yupanqui",
+                          "name_category": "mantenimiento",
+                          "name_type": "popular",
+                          "likes": "0",
+                          "comments": "1",
+                          "provider": []
+                      },
+                      {
+                          "id": "9",
+                          "idfacebook": 131312321321321,
+                          "pu_type_id": "2",
+                          "pu_category_id": null,
+                          "pu_state_id": "1",
+                          "user_id": "14",
+                          "description": "Alguien me puede recomendar una masajista?",
+                          "date_publish": "2015-12-21 20:26:10",
+                          "date_expired": "2015-12-21 20:26:10",
+                          "flagactive": "1",
+                          "datecreate": "2015-12-21 20:26:10",
+                          "lastupdate": "2015-12-21 20:26:10",
+                          "picture_publication": "http://local.buendato//dinamic/publication/20151221202610665.jpg",
+                          "picture_user": "http://local.buendato//dinamic/user/20151218154743297.jpg",
+                          "picture_category": "http://local.buendato//dinamic/category/2016012007310311.png",
+                          "name_user": "noel yupanqui",
+                          "name_category": "mantenimiento",
+                          "name_type": "popular",
+                          "likes": "0",
+                          "comments": "4",
+                          "provider": []
+                      },
+                      {
+                          "id": "30",
+                          "idfacebook": 115454564545645,
+                          "pu_type_id": "1",
+                          "pu_category_id": "4",
+                          "pu_state_id": "1",
+                          "user_id": "14",
+                          "description": "Donde recomiendan un buen profesor de mate",
+                          "date_publish": "2016-01-26 22:34:40",
+                          "date_expired": "2016-01-26 22:34:40",
+                          "flagactive": "1",
+                          "datecreate": "2016-01-26 22:34:40",
+                          "lastupdate": "2016-01-26 22:34:40",
+                          "picture_publication": null,
+                          "picture_user": "http://local.buendato//dinamic/user/20151218154743297.jpg",
+                          "picture_category": "http://local.buendato//dinamic/category/20160120073113822.png",
+                          "name_user": "noel yupanqui",
+                          "name_category": "deporte",
+                          "name_type": "comun",
+                          "likes": "0",
+                          "comments": "0",
+                          "provider": [
+                              {
+                                  "pr_provider_id": "1",
+                                  "id_type_provider": "3",
+                                  "name_provider": "peres",
+                                  "name_type_provider": "premium",
+                                  "approved": "1",
+                                  "total_users": "0",
+                                  "score": "1.50",
+                                  "picture_provider": "http://local.buendato/Array",
+                                  "name_category": "educación",
+                                  "picture_category": "http://local.buendato//dinamic/category/20160120073133296.png"
+                              }
+                          ]
+                      }
+                  ],
+                  "data_error": []
+              }
+  /{publication_id}: 
+    description: Detalle de proveedor
+    displayName: Detalle de proveedor
+    uriParameters:
+      publication_id:
+        description: id de publicacion
+        type: integer
+        example: 1
+    get:
+      securedBy: [jwt]
+      headers:
+        Authorization:
+          description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+          type: string
+      queryParameters:
+        page:
+            type: number
+            description: El numero de pagina
+            required: true
+      description: Lista de Comentarios paginado de Publicación
+      responses:
+        200:
+          description: Lista en formato JSon
+          body:
+            application/json:
+              example: |
+                {
+                    "status": 1,
+                    "msg": "ok",
+                    "data": [
+                        {
+                            "id": "1",
+                            "pu_ad_id": "1",
+                            "user_id": "12",
+                            "description": "dedededed",
+                            "picture": null,
+                            "lastupdate": null,
+                            "datecreate": "-0001-11-30 00:00:00",
+                            "flagactive": "1",
+                            "picture_user": "http://10.10.0.67//dinamic/user/20151214194024245.jpg",
+                            "name_user": "jos yupanqui",
+                            "provider": [
+                                {
+                                    "pr_provider_id": "1",
+                                    "name_provider": "josmel",
+                                    "id_type_provider": "2",
+                                    "name_type_provider": "comun",
+                                    "approved": "1",
+                                    "total_users": "0",
+                                    "score": "1.50",
+                                    "picture_provider": "http://10.10.0.67/20151214194024245.jpg"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "2",
+                            "pu_ad_id": "1",
+                            "user_id": "13",
+                            "description": "e3e3e3",
+                            "picture": null,
+                            "lastupdate": null,
+                            "datecreate": null,
+                            "flagactive": "1",
+                            "picture_user": "http://10.10.0.67/20151214194024245.jpg",
+                            "name_user": "admin admin",
+                            "provider": []
+                        }
+                    ],
+                    "data_error": []
+                }
+    delete:
+      securedBy: [jwt]
+      headers:
+        Authorization:
+          description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+          type: string
+      description: Eliminar propia publicacion  o denunciar publicacion de otro usuario
+      responses:
+        200:
+          description: resultado en formato JSon
+          body:
+            application/json:
+              example: |
+                {
+                    "status": 1,
+                    "msg": "ok",
+                    "data": [],
+                    "data_error": []
+                }
+/like-publication:
+  displayName: Like de Publicacion
+  post:
+    securedBy: [jwt]
+    headers:
+      Authorization:
+        description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+        type: string
+    description: |
+        Registrar Like de una Publicación
+    body:
+        application/json:
+            schema: |
+                { 
+                  "type": "object",
+                  "description": "register Like de  publication",
+                  "properties": 
+                    {                    
+                        "pu_ad_id": { "type": "integer"}
+                    },
+                  "required": [ "pu_ad_id"]
+                }
+            example: |
+                {
+                    "pu_ad_id":2
+                }
+    responses:
+      200:
+        description: Resultado en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                "status": 1,
+                "msg": "ok",
+                "data": {
+                    "id": 6
+                },
+                "data_error": []
+              }
+/comment-publication:
+  displayName: Comentario de Publicacion
+  post:
+    securedBy: [jwt]
+    headers:
+      Authorization:
+        description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+        type: string
+    description: |
+        Registrar Comentario de una  Publicación
+    body:
+        application/json:
+            schema: |
+                { 
+                  "type": "object",
+                  "description": "register Comentario de una publication",
+                  "properties": 
+                    {     
+                        "description": { "type": "string"},              
+                        "pu_ad_id": { "type": "integer"},
+                        "picture": { "type": "string"},
+                        "pr_provider_id":{ "type": "integer"}
+                    },
+                  "required": [ "pu_ad_id","description"]
+                }
+            example: |
+                {
+                    "description":"hola les recomiendo este proveedor",
+                    "pu_ad_id":5,
+                    "picture":"iVBORw0KGgoAAAANSUhEUgAAADsAAAApCAYAAACLO1EjAAAAAXNSR0IArs4c6QAA
+                    AAlwSFlzAAAWJQAAFiUBSVIk8AAAABxpRE9UAAAAAgAAAAAAAAAVAAAAKAAAABUA
+                    AAAUAAAHlWThBZQAAAdhSURBVGgFjFjLruJGEOXnsshmpEiRssln8DnZzSqJFI2U
+                    RaRZZaQoo0wy9zHcFy9jwIBt8JM3+FI5p6AvBgx3LPWYa7e761SdOlU9JbfblHMj
+                    "
+                }
+    responses:
+      200:
+        description: Resultado en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                "status": 1,
+                "msg": "ok",
+                "data": {
+                    "id": 6
+                },
+                "data_error": []
+              }
+/comment-provider:
+  displayName: Comentario y valoración de Proveedor
+  post:
+    securedBy: [jwt]
+    headers:
+      Authorization:
+        description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+        type: string
+    description: |
+        Registrar Comentario y valoración de una  Proveedor
+    body:
+        application/json:
+            schema: |
+                { 
+                  "type": "object",
+                  "description": "register Comentario y valoración de una publication",
+                  "properties": 
+                    {     
+                        "description": { "type": "string"},              
+                        "punctuation": { "type": "integer"},
+                        "picture": { "type": "string"},
+                        "pr_provider_id":{ "type": "integer"}
+                    },
+                  "required": [ "pr_provider_id","description","punctuation"]
+                }
+            example: |
+                {
+                    "pr_provider_id":6,
+                    "description":"Muy Buen servicio",
+                    "punctuation":5,
+                    "picture":"iVBORw0KGgoAAAANSUhEUgAAADsAAAApCAYAAACLO1EjAAAAAXNSR0IArs4c6QAA
+                    AAlwSFlzAAAWJQAAFiUBSVIk8AAAABxpRE9UAAAAAgAAAAAAAAAVAAAAKAAAABUA
+                    AAAUAAAHlWThBZQAAAdhSURBVGgFjFjLruJGEOXnsshmpEiRssln8DnZzSqJFI2U
+                    RaRZZaQoo0wy9zHcFy9jwIBt8JM3+FI5p6AvBgx3LPWYa7e761SdOlU9JbfblHMj"
+                }
+    responses:
+      200:
+        description: Resultado en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                "status": 1,
+                "msg": "ok",
+                "data": {
+                    "id": 6
+                },
+                "data_error": []
+              }
+/register-friends:
+  description: permite agregar amigos de  facebook
+  displayName: permite agregar amigos de  facebooks
+  post:
+    securedBy: [jwt]
+    headers:
+      Authorization:
+        description: Se utiliza para enviar un token válido . No utilice con el parámetro de cadena de consulta
+        type: string
+    description: |
+        Permite agregar amigos de facebook
+    body:
+        application/json:
+            schema: |
+                { 
+                  "type": "object",
+                  "description": "Permite agregar amigos de facebook",
+                  "properties": 
+                    {     
+                        "data_friends": { "type": "string"}
+                    },
+                  "required": [ "data_friends"]
+                }
+            example: |
+                {
+                    "data_friends":"{\n    \"data\": [\n        {\n            \"id\": \"AaLDkxqmoHVy_kur3QH_GcoqeXnNT3Yq7CrRyJ_R63FnCnxSoNv3sFnjgdahqugge0fwczpRPwhHY79_K1em8D3pnMWCuNOTr6jCkPe6lWYXBg\",\n            \"name\": \"Hector Floyd\",\n            \"picture\": {\n                \"data\": {\n                    \"is_silhouette\": false,\n                    \"url\": \"https:\/\/fbcdn-profile-a.akamaihd.net\/hprofile-ak-xpa1\/v\/t1.0-1\/c8.0.50.50\/p50x50\/63950_10203949139743751_5232762622187423091_n.jpg?oh=e8b9e4b8b43752141a0e24d69b95b9e1&oe=57288C5C&__gda__=1463986843_7adddb6927a3ad59a89dda22d5231f18\"\n                }\n            }\n        },\n        {\n            \"id\": \"AaIEK-QhH6fnMpp9oNq-C6pHPpP1MwkM04Qf6yLbxmtl1XkT-j0gr6xHz1xVWyKYKTbenW6fs5BXrQMGYjrY1WVji0wLjQLWiw5UimFTQLTKgw\",\n            \"name\": \"Eduardo Jos\u00e9 Medina Alfaro\",\n            \"picture\": {\n                \"data\": {\n                    \"is_silhouette\": false,\n                    \"url\": \"https:\/\/fbcdn-profile-a.akamaihd.net\/hprofile-ak-xpt1\/v\/t1.0-1\/p50x50\/12079424_10205004434176814_7088424199927341812_n.jpg?oh=868f35d3d580091b89b421b278e3753d&oe=5731F1CB&__gda__=1462179510_61995d2d0b1d703a44e929a9558c5411\"\n                }\n            }\n        },\n        {\n            \"id\": \"AaIAXWFKL-GwN5MCOM87d0xTvGRD7ZjKoaD_weaC4geKSmo-scJogzKgbF_a8RRYyIrhGcDYojIfBS40QpJhfCTQ11cKAWvmQ-cnDIqeYwYRsg\",\n            \"name\": \"Louis Lopez Huamani\",\n            \"picture\": {\n                \"data\": {\n                    \"is_silhouette\": false,\n                    \"url\": \"https:\/\/fbcdn-profile-a.akamaihd.net\/hprofile-ak-xtf1\/v\/t1.0-1\/p50x50\/10665809_963150913711212_5999610143046387492_n.jpg?oh=a991b5b3e7e9d2a706c7cb2f1a0e190a&oe=57374A13&__gda__=1463764053_cab966ad168b912e8458a19915acc39e\"\n                }\n            }\n        },\n        {\n            \"id\": \"AaJsdDy13ldGKarG_AAYu8ZTHZtZLN4jTHkhHtRlflFfBi4qA1RXF3ru1yCtP7Fa99r36snPm4bGRG-Gw38RqYibyB-PjObv6iEDtIifFNilHw\",\n            \"name\": \"Jesus Castro Escalante\",\n            \"picture\": {\n                \"data\": {\n                    \"is_silhouette\": false,\n                    \"url\": \"https:\/\/fbcdn-profile-a.akamaihd.net\/hprofile-ak-frc3\/v\/t1.0-1\/p50x50\/10940521_1010849642276308_1846786750439191117_n.jpg?oh=19951893326f27634fdb48fdc907b588&oe=572A94FE&__gda__=1462465132_3958da5fea407f8bc9b66bf7947bdd49\"\n                }\n            }\n        },\n        {\n            \"id\": \"AaIIFuMCLzpN5fpHLGBNcNQdsRmL8mHApaPMgFJCL0ZYMRCR8doqvY8Y5CXPM-o4F1iSgsQ7hOkrB1bJTptUaeK3mDbv7CpL9LzzhYlvnJIEBw\",\n            \"name\": \"Sergio G Dellepiane Espinoza\",\n            \"picture\": {\n                \"data\": {\n                    \"is_silhouette\": false,\n                    \"url\": \"https:\/\/fbcdn-profile-a.akamaihd.net\/hprofile-ak-xpt1\/v\/t1.0-1\/p50x50\/1916738_502867333217773_8997795212138245018_n.jpg?oh=67c3b1b43db3776359c7cb1402828ab1&oe=5745C6D8&__gda__=1463172229_3e45e914224b5f74b661f4829b47ee9d\"\n                }\n            }\n        },\n        {\n            \"id\": \"AaLBlJine0P2prRndq8V-gDSHumzqZyMIhnIHnhLpJJfyEieXJKzpPP0XyvTtA-eVJCBVpRWNID-BMSzONmHTSOWt41vUB6FoYsCp7uy8qHttg\",\n            \"name\": \"Gianfranco Espinoza\",\n            \"picture\": {\n                \"data\": {\n                    \"is_silhouette\": true,\n                    \"url\": \"https:\/\/fbcdn-profile-a.akamaihd.net\/hprofile-ak-xfa1\/v\/t1.0-1\/c15.0.50.50\/p50x50\/10354686_10150004552801856_220367501106153455_n.jpg?oh=31a919a3d795bc64ad02d0a1b462300e&oe=5736B82F&__gda__=1463225095_484ea4441f278e6b8895ab53a1be91a0\"\n                }\n            }\n        },\n        {\n            \"id\": \"AaLqnPtutzf3cDjUmnf_Mu4H5E_dWlvhkSaT6u88WgC2qaR6yWwFXqIoyYYy_fGJzSi__fZg3UdE7jc0MgAObUkFaBhl7iAgOSDGXSg11KVdUg\",\n            \"name\": \"Jesus Prueba\",\n            \"picture\": {\n                \"data\": {\n                    \"is_silhouette\": false,\n                    \"url\": \"https:\/\/scontent.xx.fbcdn.net\/hprofile-xta1\/v\/l\/t1.0-1\/p50x50\/10171005_1388029278173645_745442906058184357_n.jpg?oh=28a59b5a9404282d9e95f47b8c72986e&oe=5738FBE1\"\n                }\n            }\n        }\n    ],\n    \"paging\": {\n        \"cursors\": {\n            \"before\": \"QWFJbzE5cmtScFNGUmRDLTlpVWd6elVRc3hyX1ljT1lVYlpLaXBqZAFVpOWdwbVR0WEZAXZADhGX2RySTJsbDNtV0NuLUxWdUlWWlJPT2drMFBiemxBMUt3TVpGUENRQ2U0OHhHNkdscUJ1aXN5WEEZD\",\n            \"after\": \"QWFKcW9KLW1oRWlDZAlpOUkk1Mm9NckNmM3ozaEtpRjV0azgyRjFrMGJBV3p3OVV0dG9YYk9keTA3SHhoQ2tqM2lWTXlzbjlrcmNkN3lKY2JRenlDMVFLS2dLUGUwQUtyRTl6RGVCM2Q5U2M0ZAlEZD\"\n        }\n    }\n}"
+                }
+    responses:
+      200:
+        description: resultado en formato JSon
+        body:
+          application/json:
+            example: |
+              {
+                "status": 1,
+                "msg": "OK",
+                "data": [  ],
+                "data_error": []
+              }
+/register-alternative:
+  description: Registro y login de usuario alternativo
+  displayName: Registro y login de usuario alternativo
+  post:
+    description: |
+        Registro y login de usuario alternativo
+    body:
+        application/json:
+          schema: |
+            { 
+              "type": "object",
+              "description": " Registro y login de usuario alternativo",
+              "properties": 
+                {                    
+                    "email": { "type": "string" },
+                    "idfacebook": { "type": "string" },
+                    "tokendevice": { "type": "string" },
+                    "typedevice": { "type": "integer", "value": "1=Ios or 2=Android"},
+                    "picture": { "type": "string" },
+                    "name": { "type": "string"},
+                    "lastname": { "type": "string"}
+                },
+              "required": [ "email", "idfacebook","tokendevice","typedevice","email","name","lastname" ]
+            }
+          example: |
+            {
+                "idfacebook":123456,
+                "name":"josmel",
+                "lastname":"yupanqui",
+                "picture":"https://facebook.com/15456456454?size=small",
+                "typedevice":2 ,
+                "tokendevice":"458478748748545489748749874874897487498484984",
+                "email":"jy2@osp.pe"
+            }
+    responses:
+      200: 
+          headers:
+            _token: 
+              description: token para los posteriores request
+              example : 45847874874ewfewfewf854548974nyntyntyn8749874874897487498484984
+          body:
+            application/json:
+              example: |
+                {
+                    "status": 1,
+                    "msg": "ok",
+                    "data": [
+                        {
+                            "id": "12",
+                            "name": "jos",
+                            "lastname": "yupanqui",
+                            "email": "jy@osp.pe",
+                            "tokendevice": "31234243145253",
+                            "picture": "http://10.10.0.67/dinamic/user/20151214194024245.jpg",
+                            "flagactive": "1",
+                            "lastupdate": "2016-01-07 19:34:17",
+                            "datecreate": "2015-12-14 19:40:24",
+                            "datedelete": null,
+                            "typedevice": "1",
+                            "flagterms": "1",
+                            "categories": [
+                                {
+                                    "id": "1",
+                                    "picture": "http://10.10.0.67/ssss",
+                                    "name_category": "mantenimiento"
+                                },
+                                {
+                                    "id": "4",
+                                    "picture": null,
+                                    "name_category": "educación"
+                                },
+                                {
+                                    "id": "6",
+                                    "picture": null,
+                                    "name_category": "comida"
+                                }
+                            ]
+                        }
+                    ],
+                    "data_error": []
+                }
